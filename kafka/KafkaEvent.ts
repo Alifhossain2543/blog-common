@@ -4,7 +4,7 @@ import  { Kafka, Producer, Consumer } from "kafkajs"
 interface KafKaInter {
   kafka: Kafka,
   producer(): Promise<Producer>,
-consumer(): Promise<Consumer>
+  consumer(): Promise<Consumer>
 
 }
 

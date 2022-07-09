@@ -1,7 +1,7 @@
 export declare enum KafkaEventType {
-    POST_CREATED = "POST:CREATED",
-    POST_UPDATED = "POST:UPDATED",
-    POST_DELETED = "POST:DELETED"
+    POST_CREATED = "POST_CREATED",
+    POST_UPDATED = "POST_UPDATED",
+    POST_DELETED = "POST_DELETED"
 }
 export interface CreateEvent {
     type: KafkaEventType.POST_CREATED;

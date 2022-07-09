@@ -8,7 +8,7 @@ interface Events {
 }
 
 export class Kafka implements Events {
-  constructor(private kafka = new KafkaEvent()) {}
+  constructor(public kafka = new KafkaEvent()) {}
 
   async send(topic: KafkaEventType, event: SupportedEvent) {
     const producer = await this.kafka.producer()
@@ -27,6 +27,7 @@ export class Kafka implements Events {
 }
 
 export const KafkaBus = new Kafka()
+
 
 // KafkaBus.recieve(KafkaEventType.POST_CREATE).then(consumer => {
 //   consumer.run({
