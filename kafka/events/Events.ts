@@ -1,54 +1,40 @@
-import { KafkaEventType, EventProducer } from '../KafkaEvent';
+import { KafkaEvent } from "../KafkaEvent"
+import { SupportedEvent, KafkaEventType } from './type';
+import {  Consumer } from "kafkajs"
 
-//create a class for all the event type <<ONLY the PRODUCERS
-
-export interface CreateEvent {
-  type: KafkaEventType.CREATE
-  data: {
-    id: string
-    title: string
-    content: string
-    authorId: number
-  }
+interface Events {
+  send: (topic: KafkaEventType, event: SupportedEvent) => Promise<void>
+  recieve: (topic: KafkaEventType) => Promise<Consumer>
 }
 
-export interface UpdateEvent {
-  type: KafkaEventType.UPDATE
-  data: {
-    id: string
-    title: string
-    content: string
-  }
-}
+export class Kafka implements Events {
+  constructor(private kafka = new KafkaEvent()) {}
 
-export interface DeleteEvent {
-  type: KafkaEventType.DELETE
-  data: {
-    id: string
-  }
-}
+  async send(topic: KafkaEventType, event: SupportedEvent) {
+    const producer = await this.kafka.producer()
 
-//write a supported event type
-export type SupportedEvent = CreateEvent | UpdateEvent | DeleteEvent
-
-//write a class based on event generic type
-
-export class Events {
-  constructor(public Producer = EventProducer) {}
-
-  async createEvent(topic: string, payload: SupportedEvent) {
-    const event = {
-      type: payload.type,
-      data: payload.data,
-    }
-    await this.Producer.send({
-      topic: topic,
-      messages: [{ value: JSON.stringify(event) }],
+    await producer.send({
+      topic,
+      messages: [{ value: JSON.stringify(event.data) as unknown as Buffer }],
     })
   }
+
+  async recieve(topic: KafkaEventType) {
+    const consumer = await this.kafka.consumer()
+    await consumer.subscribe({ topic, fromBeginning: true })
+    return consumer
+  }
 }
 
-const newEvent = new Events()
+export const KafkaBus = new Kafka()
 
-// {type : KafkaEventType.CREATE, data : {id : "1", title : "title", content : "content", 
-    // authorId : 1}}
+// KafkaBus.recieve(KafkaEventType.POST_CREATE).then(consumer => {
+//   consumer.run({
+//     eachMessage: async ({ topic, partition, message }) => {
+//       console.log(`Received message ${message}`)
+//     }
+//   })
+// }
+// )
+
+// KafkaBus.send({type: KafkaEventType.POST_CREATED, data: {id: "1", title: "title", content: "content", authorId: 1}}, KafkaEventType.POST_CREATED)
