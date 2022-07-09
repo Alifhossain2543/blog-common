@@ -6,3 +6,6 @@ export * from './middlewares/auth-user';
 export * from './middlewares/customErrorHandler';
 export * from './middlewares/errorHandler';
 export * from './middlewares/validationErrorHandler';
+export * from './kafka/KafkaEvent';
+export * from './kafka/events/Events';
+export * from './kafka/events/type';
