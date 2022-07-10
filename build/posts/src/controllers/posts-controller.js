@@ -13,8 +13,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deletePost = exports.updatePost = exports.createPost = exports.postTestRouteTwo = exports.postTestRoute = void 0;
+const blogcommon_1 = require("@hrioymahmud/blogcommon");
 const client_1 = __importDefault(require("../client"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+const blogcommon_2 = require("@hrioymahmud/blogcommon");
 const postTestRoute = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const token = jsonwebtoken_1.default.sign({ id: 1, email: "test@gmail.com" }, process.env.JWT_SECRET, {
         expiresIn: "24h",
@@ -30,11 +32,11 @@ exports.postTestRouteTwo = postTestRouteTwo;
 const createPost = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { title, content, author } = req.body;
     if (!title || !content || !author) {
-        throw new BadRequest("Invalid post data.", 500);
+        throw new blogcommon_1.BadRequest("Invalid post data.", 500);
     }
     const userData = req.currentUser;
     if (parseInt(userData.id) != author.userId) {
-        throw new BadRequest("You are not authorized to create this post.");
+        throw new blogcommon_1.BadRequest("You are not authorized to create this post.");
     }
     //check if the author is in the post db
     let authorAccount;
@@ -66,8 +68,8 @@ const createPost = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
             author: true
         }
     });
-    KafkaBus.send(KafkaEventType.POST_CREATED, {
-        type: KafkaEventType.POST_CREATED,
+    blogcommon_2.KafkaBus.send(blogcommon_2.KafkaEventType.POST_CREATED, {
+        type: blogcommon_2.KafkaEventType.POST_CREATED,
         data: {
             id: newPost.id,
             title: newPost.title,
@@ -86,7 +88,7 @@ const updatePost = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     const user = yield client_1.default.user.findUnique({ where: { userId: parseInt(currentUser.id) } });
     //throw an error if the author dosen't exist
     if (!user) {
-        throw new BadRequest("You are not authorized to update this post.");
+        throw new blogcommon_1.BadRequest("You are not authorized to update this post.");
     }
     //check if the post exists
     let post;
@@ -99,7 +101,7 @@ const updatePost = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         }
     });
     if (!post) {
-        throw new BadRequest("Post not found.");
+        throw new blogcommon_1.BadRequest("Post not found.");
     }
     //throw an error if the post dosen't exist
     //  -------------update the post-----------------
@@ -123,8 +125,8 @@ const updatePost = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
             },
         });
     }
-    KafkaBus.send(KafkaEventType.POST_UPDATED, {
-        type: KafkaEventType.POST_UPDATED,
+    blogcommon_2.KafkaBus.send(blogcommon_2.KafkaEventType.POST_UPDATED, {
+        type: blogcommon_2.KafkaEventType.POST_UPDATED,
         data: {
             id: post.id,
             title: post.title,
@@ -144,7 +146,7 @@ const deletePost = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     const user = yield client_1.default.user.findUnique({ where: { userId: parseInt(currentUser.id) } });
     //throw error if dosent't match or found
     if (!user || user.userId != parseInt(req.currentUser.id)) {
-        throw new BadRequest("You are not authorized to delete this post.");
+        throw new blogcommon_1.BadRequest("You are not authorized to delete this post.");
     }
     //delete the post
     const post = yield client_1.default.post.delete({
@@ -155,8 +157,8 @@ const deletePost = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
             author: true,
         },
     });
-    KafkaBus.send(KafkaEventType.POST_DELETED, {
-        type: KafkaEventType.POST_DELETED,
+    blogcommon_2.KafkaBus.send(blogcommon_2.KafkaEventType.POST_DELETED, {
+        type: blogcommon_2.KafkaEventType.POST_DELETED,
         data: {
             id: post.id,
             authorId: post.author.id,
