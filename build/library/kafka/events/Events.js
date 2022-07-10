@@ -11,24 +11,43 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.KafkaBus = exports.Kafka = void 0;
 const KafkaEvent_1 = require("../KafkaEvent");
-class Kafka {
+class Kafka extends KafkaEvent_1.KafkaEvent {
     constructor() {
-        this.KafkaClass = new KafkaEvent_1.KafkaEvent();
+        super();
     }
+    //producer connect
+    producerConnect() {
+        return __awaiter(this, void 0, void 0, function* () {
+            const producer = yield this.producer();
+            yield producer.connect().then(() => console.log("Producer connected"));
+            return producer;
+        });
+    }
+    //send function
     send(topic, event) {
         return __awaiter(this, void 0, void 0, function* () {
-            const producer = yield this.KafkaClass.producer();
-            yield producer.connect().then(() => console.log("Producer connected"));
+            const producer = yield this.producerConnect();
+            yield producer.connect().then(() => {
+                console.log("Producer connected");
+            });
             yield producer.send({
                 topic,
                 messages: [{ value: JSON.stringify(event.data) }],
             });
         });
     }
+    //consumer connect
+    consumerConnect() {
+        return __awaiter(this, void 0, void 0, function* () {
+            const consumer = yield this.consumer();
+            yield consumer.connect().then(() => console.log("Consumer connected"));
+            return consumer;
+        });
+    }
+    //recieve function
     recieve(topic) {
         return __awaiter(this, void 0, void 0, function* () {
-            const consumer = yield this.KafkaClass.consumer();
-            yield consumer.connect().then(() => console.log("Consumer connected"));
+            const consumer = yield this.consumerConnect();
             yield consumer.subscribe({ topic, fromBeginning: true });
             return consumer;
         });

@@ -16,10 +16,6 @@ export class KafkaEvent implements KafKaInter {
         brokers: ["192.168.1.240:9092"],
     })
   ) {
-
-     
-
-    
   }
 
    async producer () {
