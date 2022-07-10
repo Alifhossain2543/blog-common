@@ -19,13 +19,11 @@ export class KafkaEvent implements KafKaInter {
 
    async producer () {
     const producers = this.kafka.producer()
-      producers.connect().then(() => console.log("producer connected"))
     return producers
   }
 
       async consumer () {
         const consumers = this.kafka.consumer({ groupId: "blog-app" })
-         consumers.connect().then(() => console.log("consumer connected"))
         return consumers
     }
 }

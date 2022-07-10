@@ -15,8 +15,7 @@ export class Kafka implements Events {
 
   async send(topic: KafkaEventType, event: SupportedEvent) {
     const producer = await this.KafkaClass.producer()
-    await producer.connect()
-
+    await producer.connect().then(() => console.log("Producer connected"))
     await producer.send({
       topic,
       messages: [{ value: JSON.stringify(event.data) as unknown as Buffer }],
@@ -25,7 +24,7 @@ export class Kafka implements Events {
 
   async recieve(topic: KafkaEventType) {
     const consumer = await this.KafkaClass.consumer()
-    await consumer.connect()
+    await consumer.connect().then(() => console.log("Consumer connected"))
     await consumer.subscribe({ topic, fromBeginning: true })
     return consumer
   }

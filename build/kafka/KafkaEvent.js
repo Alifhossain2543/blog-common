@@ -20,16 +20,16 @@ class KafkaEvent {
     }
     producer() {
         return __awaiter(this, void 0, void 0, function* () {
-            const producer = this.kafka.producer();
-            producer.connect().then(() => console.log("producer connected"));
-            return producer;
+            const producers = this.kafka.producer();
+            producers.connect().then(() => console.log("producer connected"));
+            return producers;
         });
     }
     consumer() {
         return __awaiter(this, void 0, void 0, function* () {
-            const consumer = this.kafka.consumer({ groupId: "blog-app" });
-            consumer.connect().then(() => console.log("consumer connected"));
-            return consumer;
+            const consumers = this.kafka.consumer({ groupId: "blog-app" });
+            consumers.connect().then(() => console.log("consumer connected"));
+            return consumers;
         });
     }
 }

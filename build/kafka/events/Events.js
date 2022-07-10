@@ -14,12 +14,11 @@ const KafkaEvent_1 = require("../KafkaEvent");
 class Kafka {
     constructor() {
         this.KafkaClass = new KafkaEvent_1.KafkaEvent();
-        this.producer = this.KafkaClass.producer;
-        this.consumer = this.KafkaClass.consumer;
     }
     send(topic, event) {
         return __awaiter(this, void 0, void 0, function* () {
-            const producer = yield this.producer();
+            const producer = yield this.KafkaClass.producer();
+            yield producer.connect();
             yield producer.send({
                 topic,
                 messages: [{ value: JSON.stringify(event.data) }],
@@ -28,7 +27,8 @@ class Kafka {
     }
     recieve(topic) {
         return __awaiter(this, void 0, void 0, function* () {
-            const consumer = yield this.consumer();
+            const consumer = yield this.KafkaClass.consumer();
+            yield consumer.connect();
             yield consumer.subscribe({ topic, fromBeginning: true });
             return consumer;
         });
