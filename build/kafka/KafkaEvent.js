@@ -20,7 +20,7 @@ class KafkaEvent {
     }
     producer() {
         return __awaiter(this, void 0, void 0, function* () {
-            const producers = this.kafka.producer();
+            const producers = this.kafka.producer({ createPartitioner: kafkajs_1.Partitioners.DefaultPartitioner });
             return producers;
         });
     }

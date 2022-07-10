@@ -7,24 +7,44 @@ interface Events {
   recieve: (topic: KafkaEventType) => Promise<Consumer>
 }
 
-export class Kafka implements Events {
-  protected KafkaClass = new KafkaEvent()
 
+export class Kafka extends KafkaEvent implements Events {
+  constructor() {
+    super()
+  }
 
-  constructor() {}
+  //producer connect
+  async producerConnect() {
+    const producer = await this.producer()
+     await producer.connect().then(() => console.log("Producer connected"))
+      return producer
+  }
 
+  //send function
   async send(topic: KafkaEventType, event: SupportedEvent) {
-    const producer = await this.KafkaClass.producer()
-    await producer.connect().then(() => console.log("Producer connected"))
+    const producer = await this.producerConnect()
+    await producer.connect().then(() => 
+    {
+      console.log("Producer connected")
+      
+    }
+    )
     await producer.send({
       topic,
       messages: [{ value: JSON.stringify(event.data) as unknown as Buffer }],
     })
   }
 
-  async recieve(topic: KafkaEventType) {
-    const consumer = await this.KafkaClass.consumer()
+  //consumer connect
+  async consumerConnect() {
+    const consumer = await this.consumer()
     await consumer.connect().then(() => console.log("Consumer connected"))
+    return consumer
+  }
+
+  //recieve function
+  async recieve(topic: KafkaEventType) {
+    const consumer = await this.consumerConnect()
     await consumer.subscribe({ topic, fromBeginning: true })
     return consumer
   }

@@ -1,4 +1,5 @@
 import  { Kafka, Producer, Consumer, Partitioners } from "kafkajs"
+import { createPost } from '../../posts/src/controllers/posts-controller';
 
 
 interface KafKaInter {
@@ -15,6 +16,10 @@ export class KafkaEvent implements KafKaInter {
         brokers: ["192.168.1.240:9092"],
     })
   ) {
+
+     
+
+    
   }
 
    async producer () {
