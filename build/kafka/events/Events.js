@@ -12,12 +12,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.KafkaBus = exports.Kafka = void 0;
 const KafkaEvent_1 = require("../KafkaEvent");
 class Kafka {
-    constructor(kafka = new KafkaEvent_1.KafkaEvent()) {
-        this.kafka = kafka;
+    constructor() {
+        this.KafkaClass = new KafkaEvent_1.KafkaEvent();
+        this.producer = this.KafkaClass.producer;
+        this.consumer = this.KafkaClass.consumer;
     }
     send(topic, event) {
         return __awaiter(this, void 0, void 0, function* () {
-            const producer = yield this.kafka.producer();
+            const producer = yield this.producer();
             yield producer.send({
                 topic,
                 messages: [{ value: JSON.stringify(event.data) }],
@@ -26,7 +28,7 @@ class Kafka {
     }
     recieve(topic) {
         return __awaiter(this, void 0, void 0, function* () {
-            const consumer = yield this.kafka.consumer();
+            const consumer = yield this.consumer();
             yield consumer.subscribe({ topic, fromBeginning: true });
             return consumer;
         });

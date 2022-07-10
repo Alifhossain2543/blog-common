@@ -6,8 +6,10 @@ interface Events {
     recieve: (topic: KafkaEventType) => Promise<Consumer>;
 }
 export declare class Kafka implements Events {
-    kafka: KafkaEvent;
-    constructor(kafka?: KafkaEvent);
+    protected KafkaClass: KafkaEvent;
+    private producer;
+    private consumer;
+    constructor();
     send(topic: KafkaEventType, event: SupportedEvent): Promise<void>;
     recieve(topic: KafkaEventType): Promise<Consumer>;
 }
