@@ -1,4 +1,4 @@
-import  { Kafka, Producer, Consumer } from "kafkajs"
+import  { Kafka, Producer, Consumer, Partitioners } from "kafkajs"
 
 
 interface KafKaInter {
@@ -18,7 +18,7 @@ export class KafkaEvent implements KafKaInter {
   }
 
    async producer () {
-    const producers = this.kafka.producer()
+    const producers = this.kafka.producer({createPartitioner: Partitioners.DefaultPartitioner})
     return producers
   }
 

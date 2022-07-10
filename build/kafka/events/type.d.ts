@@ -6,7 +6,7 @@ export declare enum KafkaEventType {
 export interface CreateEvent {
     type: KafkaEventType.POST_CREATED;
     data: {
-        id: string;
+        id: number;
         title: string;
         content: string;
         authorId: number;
@@ -15,15 +15,17 @@ export interface CreateEvent {
 export interface UpdateEvent {
     type: KafkaEventType.POST_UPDATED;
     data: {
-        id: string;
+        id: number;
         title: string;
         content: string;
+        authorId: number;
     };
 }
 export interface DeleteEvent {
     type: KafkaEventType.POST_DELETED;
     data: {
-        id: string;
+        id: number;
+        authorId: number;
     };
 }
 export declare type SupportedEvent = CreateEvent | UpdateEvent | DeleteEvent;
