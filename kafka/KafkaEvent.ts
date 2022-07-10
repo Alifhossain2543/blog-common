@@ -2,15 +2,15 @@ import  { Kafka, Producer, Consumer } from "kafkajs"
 
 
 interface KafKaInter {
-  kafka: Kafka,
   producer(): Promise<Producer>,
   consumer(): Promise<Consumer>
 
 }
 
 export class KafkaEvent implements KafKaInter {
+
   constructor(
-    public kafka = new Kafka({
+    private kafka = new Kafka({
       clientId: "blog-app",
         brokers: ["192.168.1.240:9092"],
     })

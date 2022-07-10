@@ -8,10 +8,14 @@ interface Events {
 }
 
 export class Kafka implements Events {
-  constructor(public kafka = new KafkaEvent()) {}
+  protected KafkaClass = new KafkaEvent()
+  private producer = this.KafkaClass.producer
+  private consumer = this.KafkaClass.consumer
+
+  constructor() {}
 
   async send(topic: KafkaEventType, event: SupportedEvent) {
-    const producer = await this.kafka.producer()
+    const producer = await this.producer()
 
     await producer.send({
       topic,
@@ -20,7 +24,7 @@ export class Kafka implements Events {
   }
 
   async recieve(topic: KafkaEventType) {
-    const consumer = await this.kafka.consumer()
+    const consumer = await this.consumer()
     await consumer.subscribe({ topic, fromBeginning: true })
     return consumer
   }
