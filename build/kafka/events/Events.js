@@ -18,7 +18,7 @@ class Kafka {
     send(topic, event) {
         return __awaiter(this, void 0, void 0, function* () {
             const producer = yield this.KafkaClass.producer();
-            yield producer.connect();
+            yield producer.connect().then(() => console.log("Producer connected"));
             yield producer.send({
                 topic,
                 messages: [{ value: JSON.stringify(event.data) }],
@@ -28,7 +28,7 @@ class Kafka {
     recieve(topic) {
         return __awaiter(this, void 0, void 0, function* () {
             const consumer = yield this.KafkaClass.consumer();
-            yield consumer.connect();
+            yield consumer.connect().then(() => console.log("Consumer connected"));
             yield consumer.subscribe({ topic, fromBeginning: true });
             return consumer;
         });
