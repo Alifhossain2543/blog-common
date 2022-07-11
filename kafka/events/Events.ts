@@ -1,44 +1,44 @@
-import { KafkaEvent } from "../KafkaEvent"
-import { SupportedEvent, KafkaEventType } from './type';
-import {  Consumer, Producer } from "kafkajs"
+// import { KafkaEvent } from "../KafkaEvent"
+// import { SupportedEvent, KafkaEventType } from './type';
+// import {  Consumer, Producer } from "kafkajs"
 
 
 
-export class KafkaBus {
-  KafkaClass = new KafkaEvent()
+// export class KafkaBus {
+//   KafkaClass = new KafkaEvent()
 
-  constructor() {}
+//   constructor() {}
 
-  //connect producer
-  public async connectProducer() {
-    const producer = await this.KafkaClass.producer()
-    await producer.connect().then(() => console.log("Producer connected"))
-    return producer
-  }
-  //connect consumer
-  public async connectConsumer() {
-    const consumer = await this.KafkaClass.consumer()
-    await consumer.connect().then(() => console.log("Consumer connected"))
-    return consumer
-  }
+//   //connect producer
+//   public async connectProducer() {
+//     const producer = await this.KafkaClass.producer()
+//     await producer.connect().then(() => console.log("Producer connected"))
+//     return producer
+//   }
+//   //connect consumer
+//   public async connectConsumer() {
+//     const consumer = await this.KafkaClass.consumer()
+//     await consumer.connect().then(() => console.log("Consumer connected"))
+//     return consumer
+//   }
 
-  async send(
-    topic: KafkaEventType,
-    event: SupportedEvent,
-  ) {
-    const producer = await this.connectProducer()
-    await producer.send({
-      topic,
-      messages: [{ value: JSON.stringify(event.data) as unknown as Buffer }],
-    })
-  }
+//   async send(
+//     topic: KafkaEventType,
+//     event: SupportedEvent,
+//   ) {
+//     const producer = await this.connectProducer()
+//     await producer.send({
+//       topic,
+//       messages: [{ value: JSON.stringify(event.data) as unknown as Buffer }],
+//     })
+//   }
 
-  async recieve(topic: KafkaEventType) {
-    const consumer = await this.connectConsumer()
-    await consumer.subscribe({ topic, fromBeginning: true })
-    return consumer
-  }
-}
+//   async recieve(topic: KafkaEventType) {
+//     const consumer = await this.connectConsumer()
+//     await consumer.subscribe({ topic, fromBeginning: true })
+//     return consumer
+//   }
+// }
 
 // export const Kafka = new KafkaBus()
 

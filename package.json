@@ -1,5 +1,5 @@
 {
-  "name": "@hrioymahmud/blogappcommon",
+  "name": "@blogapp/blogcommon",
   "version": "1.0.1",
   "description": "",
   "main": "./build/index.js",
