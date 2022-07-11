@@ -23,5 +23,4 @@ __exportStar(require("./middlewares/customErrorHandler"), exports);
 __exportStar(require("./middlewares/errorHandler"), exports);
 __exportStar(require("./middlewares/validationErrorHandler"), exports);
 __exportStar(require("./kafka/KafkaEvent"), exports);
-__exportStar(require("./kafka/events/Events"), exports);
 __exportStar(require("./kafka/events/type"), exports);
