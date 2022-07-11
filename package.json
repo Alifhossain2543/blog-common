@@ -1,6 +1,6 @@
 {
-  "name": "@blogapp/blogcommon",
-  "version": "1.0.4",
+  "name": "@hrioymahmud/blogcommon",
+  "version": "1.0.16",
   "description": "",
   "main": "./build/index.js",
   "types": "./build/index.d.ts",

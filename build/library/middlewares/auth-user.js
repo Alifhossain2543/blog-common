@@ -16,6 +16,7 @@ exports.authUser = void 0;
 const AuthValidate_1 = require("../errors/AuthValidate");
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const authUser = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log(req.session);
     if (req.session && req.session.jwt) {
         try {
             const user = jsonwebtoken_1.default.verify(req.session.jwt, process.env.JWT_SECRET);

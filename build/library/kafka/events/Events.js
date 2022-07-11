@@ -1,54 +1,38 @@
 "use strict";
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.KafkaBus = void 0;
-const KafkaEvent_1 = require("../KafkaEvent");
-class KafkaBus {
-    constructor() {
-        this.KafkaClass = new KafkaEvent_1.KafkaEvent();
-    }
-    //connect producer
-    connectProducer() {
-        return __awaiter(this, void 0, void 0, function* () {
-            const producer = yield this.KafkaClass.producer();
-            yield producer.connect().then(() => console.log("Producer connected"));
-            return producer;
-        });
-    }
-    //connect consumer
-    connectConsumer() {
-        return __awaiter(this, void 0, void 0, function* () {
-            const consumer = yield this.KafkaClass.consumer();
-            yield consumer.connect().then(() => console.log("Consumer connected"));
-            return consumer;
-        });
-    }
-    send(topic, event) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const producer = yield this.connectProducer();
-            yield producer.send({
-                topic,
-                messages: [{ value: JSON.stringify(event.data) }],
-            });
-        });
-    }
-    recieve(topic) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const consumer = yield this.connectConsumer();
-            yield consumer.subscribe({ topic, fromBeginning: true });
-            return consumer;
-        });
-    }
-}
-exports.KafkaBus = KafkaBus;
+// import { KafkaEvent } from "../KafkaEvent"
+// import { SupportedEvent, KafkaEventType } from './type';
+// import {  Consumer, Producer } from "kafkajs"
+// export class KafkaBus {
+//   KafkaClass = new KafkaEvent()
+//   constructor() {}
+//   //connect producer
+//   public async connectProducer() {
+//     const producer = await this.KafkaClass.producer()
+//     await producer.connect().then(() => console.log("Producer connected"))
+//     return producer
+//   }
+//   //connect consumer
+//   public async connectConsumer() {
+//     const consumer = await this.KafkaClass.consumer()
+//     await consumer.connect().then(() => console.log("Consumer connected"))
+//     return consumer
+//   }
+//   async send(
+//     topic: KafkaEventType,
+//     event: SupportedEvent,
+//   ) {
+//     const producer = await this.connectProducer()
+//     await producer.send({
+//       topic,
+//       messages: [{ value: JSON.stringify(event.data) as unknown as Buffer }],
+//     })
+//   }
+//   async recieve(topic: KafkaEventType) {
+//     const consumer = await this.connectConsumer()
+//     await consumer.subscribe({ topic, fromBeginning: true })
+//     return consumer
+//   }
+// }
 // export const Kafka = new KafkaBus()
 // const connectProducer = new KafkaBus().connectProducer()
 // Kafka.send(

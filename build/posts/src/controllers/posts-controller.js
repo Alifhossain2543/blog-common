@@ -16,7 +16,7 @@ exports.deletePost = exports.updatePost = exports.createPost = exports.postTestR
 const blogcommon_1 = require("@hrioymahmud/blogcommon");
 const client_1 = __importDefault(require("../client"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-const blogcommon_2 = require("@hrioymahmud/blogcommon");
+const server_1 = require("../server");
 const postTestRoute = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const token = jsonwebtoken_1.default.sign({ id: 1, email: "test@gmail.com" }, process.env.JWT_SECRET, {
         expiresIn: "24h",
@@ -68,14 +68,9 @@ const createPost = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
             author: true
         }
     });
-    blogcommon_2.KafkaBus.send(blogcommon_2.KafkaEventType.POST_CREATED, {
-        type: blogcommon_2.KafkaEventType.POST_CREATED,
-        data: {
-            id: newPost.id,
-            title: newPost.title,
-            content: newPost.content,
-            authorId: newPost.author.id,
-        },
+    yield server_1.producer.send({
+        topic: blogcommon_1.KafkaEventType.POST_CREATED,
+        messages: [{ value: JSON.stringify(newPost) }],
     });
     // send the post back to the client
     res.status(201).json({ status: "success", post: newPost });
@@ -125,14 +120,9 @@ const updatePost = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
             },
         });
     }
-    blogcommon_2.KafkaBus.send(blogcommon_2.KafkaEventType.POST_UPDATED, {
-        type: blogcommon_2.KafkaEventType.POST_UPDATED,
-        data: {
-            id: post.id,
-            title: post.title,
-            content: post.content,
-            authorId: post.author.id,
-        },
+    yield server_1.producer.send({
+        topic: blogcommon_1.KafkaEventType.POST_UPDATED,
+        messages: [{ value: JSON.stringify(post) }],
     });
     //send the post back to the client
     res.status(200).json({ status: "success", post: post });
@@ -157,12 +147,9 @@ const deletePost = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
             author: true,
         },
     });
-    blogcommon_2.KafkaBus.send(blogcommon_2.KafkaEventType.POST_DELETED, {
-        type: blogcommon_2.KafkaEventType.POST_DELETED,
-        data: {
-            id: post.id,
-            authorId: post.author.id,
-        },
+    yield server_1.producer.send({
+        topic: blogcommon_1.KafkaEventType.POST_DELETED,
+        messages: [{ value: JSON.stringify(post) }],
     });
     //send operation status to the client
     res.status(200).json({ status: "Delete successful." });
