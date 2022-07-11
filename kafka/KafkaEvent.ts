@@ -1,5 +1,4 @@
 import  { Kafka, Producer, Consumer, Partitioners } from "kafkajs"
-import { createPost } from '../../posts/src/controllers/posts-controller';
 
 
 interface KafKaInter {
