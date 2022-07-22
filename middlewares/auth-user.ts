@@ -21,7 +21,7 @@ export const authUser = async (
   res: Response,
   next: NextFunction
 ) => {
-  console.log(req.session)
+  // console.log(req.session)
   if (req.session && req.session.jwt) {
     try {
       const user = jwt.verify(req.session.jwt, process.env.JWT_SECRET!) as {
